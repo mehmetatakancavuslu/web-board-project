@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
+from django.http import Http404
 from .models import Board
 
 # Create your views here.
@@ -16,5 +16,5 @@ def board_topics(request, pk):
     Topics view showing the topics created in the given specific board and
     the relevant information of these topics.
     """
-    board = Board.objects.get(pk=pk)
+    board = get_object_or_404(Board, pk=pk)
     return render(request, 'boards/topics.html', {'board': board})
