@@ -131,8 +131,8 @@ class NewTopicTests(TestCase):
             'message': 'Lorem ipsum dolor sit amet'
         }
         response = self.client.post(url, data)
-        self.assertTrue(Topic.objects.exists())
-        self.assertTrue(Post.objects.exists())
+        self.assertTrue(Topic.objects.exists)
+        self.assertTrue(Post.objects.exists)
 
     def test_new_topic_invalid_post_data(self):
         """
