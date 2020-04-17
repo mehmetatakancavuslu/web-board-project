@@ -134,19 +134,3 @@ LOGIN_REDIRECT_URL = 'boards:home'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 LOGIN_URL = 'accounts:login'
-
-# Faster Tests:
-
-DEBUG = False
-TEMPLATE_DEBUG = False
-DEBUG_LOGGING = False
-
-# for sorl:
-THUMBNAIL_DEBUG = False
-
-# removing Django Debug Toolbar
-INSTALLED_APPS = [app for app in INSTALLED_APPS if app not in ('debug_toolbar',)]
-MIDDLEWARE = [cls for cls in MIDDLEWARE
-                      if cls not in (
-                          'debug_toolbar.middleware.DebugToolbarMiddleware',
-                      )]
