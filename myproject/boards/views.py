@@ -45,7 +45,6 @@ def new_topic(request, pk):
                 topic=topic,
                 created_by=request.user
             )
-            # TODO: Redirect to the created topic page
             return redirect('boards:topic_posts', pk=pk, topic_pk=topic.pk)
     else:
         form = NewTopicForm()
@@ -54,6 +53,8 @@ def new_topic(request, pk):
 
 def topic_posts(request, pk, topic_pk):
     topic = get_object_or_404(Topic, board__pk=pk, pk=topic_pk)
+    topic.views += 1
+    topic.save()
     return render(request, 'boards/topic_posts.html', {'topic': topic})
 
 @login_required
