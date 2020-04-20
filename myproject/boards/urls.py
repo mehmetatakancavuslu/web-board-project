@@ -15,5 +15,9 @@ urlpatterns = [
         'boards/<pk>/topics/<topic_pk>/reply/',
         views.reply_topic,
         name='reply_topic'
+    ),
+    path('boards/<pk>/topics/<topic_pk>/posts/<post_pk>/edit/',
+         views.PostUpdateView.as_view(),
+         name='edit_post'
     )
 ]
