@@ -3,7 +3,7 @@ from . import views
 
 app_name = 'boards'
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('', views.BoardListView.as_view(), name='home'),
     path('boards/<pk>/', views.board_topics, name='board_topics'),
     path('boards/<pk>/new/', views.new_topic, name='new_topic'),
     path(
