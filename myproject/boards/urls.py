@@ -4,11 +4,11 @@ from . import views
 app_name = 'boards'
 urlpatterns = [
     path('', views.BoardListView.as_view(), name='home'),
-    path('boards/<pk>/', views.board_topics, name='board_topics'),
+    path('boards/<pk>/', views.TopicListView.as_view(), name='board_topics'),
     path('boards/<pk>/new/', views.new_topic, name='new_topic'),
     path(
         'boards/<pk>/topics/<topic_pk>/',
-        views.topic_posts,
+        views.PostListView.as_view(),
         name='topic_posts'
     ),
     path(

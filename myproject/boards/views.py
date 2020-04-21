@@ -7,6 +7,7 @@ from django.db.models import Count
 from django.views.generic import UpdateView, ListView
 from django.utils import timezone
 from django.utils.decorators import method_decorator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 class BoardListView(ListView):
@@ -14,25 +15,22 @@ class BoardListView(ListView):
     context_object_name = 'boards'
     template_name = 'boards/home.html'
 
-# def home(request):
-#     """
-#     View showing all the boards and board related informations.
-#     """
-#     boards = Board.objects.all()
-#     context = {'boards': boards}
-#     return render(request, 'boards/home.html', context)
+class TopicListView(ListView):
+    model = Topic
+    context_object_name = 'topics'
+    template_name = 'boards/topics.html'
+    paginate_by = 10
 
-def board_topics(request, pk):
-    """
-    View showing the topics created in the specific board with given pk and
-    the relevant information of these topics.
-    """
-    board = get_object_or_404(Board, pk=pk)
-    topics = board.topics.order_by('-last_updated').annotate(
-        replies=Count('posts') - 1
-    )
-    return render(request, 'boards/topics.html', {'board': board,
-                                                  'topics': topics})
+    def get_context_data(self, **kwargs):
+        kwargs['board'] = self.board
+        return super().get_context_data(**kwargs)
+
+    def get_queryset(self):
+        self.board = get_object_or_404(Board, pk=self.kwargs.get('pk'))
+        queryset = self.board.topics.order_by('-last_updated').annotate(
+            replies=Count('posts') - 1
+        )
+        return queryset
 
 @login_required
 def new_topic(request, pk):
@@ -59,11 +57,23 @@ def new_topic(request, pk):
     return render(request, 'boards/new_topic.html', {'board': board,
                                                      'form': form})
 
-def topic_posts(request, pk, topic_pk):
-    topic = get_object_or_404(Topic, board__pk=pk, pk=topic_pk)
-    topic.views += 1
-    topic.save()
-    return render(request, 'boards/topic_posts.html', {'topic': topic})
+class PostListView(ListView):
+    model = Post
+    context_object_name = 'posts'
+    template_name = 'boards/topic_posts.html'
+    paginate_by = 10
+
+    def get_context_data(self, **kwargs):
+        self.topic.views += 1
+        self.topic.save()
+        kwargs['topic'] = self.topic
+        return super().get_context_data(**kwargs)
+
+    def get_queryset(self):
+        self.topic = get_object_or_404(Topic, board__pk=self.kwargs.get('pk'),
+                                       pk=self.kwargs.get('topic_pk'))
+        queryset = self.topic.posts.order_by('created_at')
+        return queryset
 
 @login_required
 def reply_topic(request, pk, topic_pk):

@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
-from ..views import board_topics
+from ..views import TopicListView
 from ..models import Board
 
 class BoardTopicsTests(TestCase):
@@ -30,7 +30,7 @@ class BoardTopicsTests(TestCase):
         Board_topics url resolves to the board_topics view.
         """
         view = resolve('/boards/1/')
-        self.assertEqual(view.func, board_topics)
+        self.assertEqual(view.func.view_class, TopicListView)
 
     def test_board_topics_view_contains_navigation_links(self):
         """
