@@ -6,6 +6,10 @@
   Post a reply
 {% endblock %}
 
+{% block stylesheet %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+{% endblock %}
+
 {% block breadcrumb %}
   <li class="breadcrumb-item">
     <a href="{% url 'boards:home' %}">Boards</a>
@@ -47,4 +51,11 @@
     </div>
   {% endfor %}
 
+{% endblock %}
+
+{% block javascript %}
+  <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+  <script>
+    var simplemde = new SimpleMDE();
+  </script>
 {% endblock %}

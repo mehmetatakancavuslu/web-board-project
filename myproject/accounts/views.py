@@ -22,7 +22,7 @@ def signup(request):
 @method_decorator(login_required, name='dispatch')
 class UserUpdateView(UpdateView):
     model = User
-    field = ('first_name', 'last_name', 'email', )
+    fields = ('first_name', 'last_name', 'email', )
     template_name = 'accounts/my_account.html'
     success_url = reverse_lazy('accounts:my_account')
 
